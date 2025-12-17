@@ -9,7 +9,7 @@ export default function Navbar({ isScrolling }) {
 
   const toggleMenu = () => setIsOpen(!isOpen)
 
-  const menuItems = ['About', 'Projects', 'Contact']
+  const menuItems = ['About', 'Projects', 'Experience', 'Education', 'Contact']
 
   const scrollToSection = (section) => {
     const element = document.getElementById(section.toLowerCase())
