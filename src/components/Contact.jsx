@@ -2,7 +2,11 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { FaGithub, FaLinkedin, FaEnvelope, FaPhone } from 'react-icons/fa'
+import emailjs from '@emailjs/browser'
 import './Contact.css'
+
+// Initialize EmailJS with your public key
+emailjs.init('1u9WqNaJC2eNYTkuC')
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -12,6 +16,8 @@ export default function Contact() {
   })
 
   const [isSubmitted, setIsSubmitted] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState('')
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -19,13 +25,32 @@ export default function Contact() {
       ...prev,
       [name]: value,
     }))
+    setError('')
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    setIsSubmitted(true)
-    setFormData({ name: '', email: '', message: '' })
-    setTimeout(() => setIsSubmitted(false), 3000)
+    setIsLoading(true)
+    setError('')
+
+    try {
+      // Send email using EmailJS
+      await emailjs.send('service_jbxdqek', 'template_n7lhwdt', {
+        from_name: formData.name,
+        from_email: formData.email,
+        to_email: 'rohansidd9@gmail.com',
+        message: formData.message,
+      })
+
+      setIsSubmitted(true)
+      setFormData({ name: '', email: '', message: '' })
+      setTimeout(() => setIsSubmitted(false), 3000)
+    } catch (err) {
+      console.error('Email send error:', err)
+      setError('Failed to send message. Please try again.')
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   const contactInfo = [
@@ -124,65 +149,138 @@ export default function Contact() {
             </div>
           </motion.div>
 
-          <motion.form
-            className="contact-form"
-            onSubmit={handleSubmit}
+          <motion.div
+            className="contact-animation"
             variants={itemVariants}
           >
-            <h3>Send Me a Message</h3>
-
-            <div className="form-group">
-              <input
-                type="text"
-                name="name"
-                placeholder="Your Name"
-                value={formData.name}
-                onChange={handleChange}
-                required
-              />
-            </div>
-
-            <div className="form-group">
-              <input
-                type="email"
-                name="email"
-                placeholder="Your Email"
-                value={formData.email}
-                onChange={handleChange}
-                required
-              />
-            </div>
-
-            <div className="form-group">
-              <textarea
-                name="message"
-                placeholder="Your Message"
-                rows="5"
-                value={formData.message}
-                onChange={handleChange}
-                required
-              />
-            </div>
-
-            <motion.button
-              type="submit"
-              className="submit-btn"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              Send Message
-            </motion.button>
-
-            {isSubmitted && (
+            <h3>Let's Create Magic Together</h3>
+            
+            <div className="animation-container">
+              {/* Floating orbs */}
               <motion.div
-                className="success-message"
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-              >
-                ✓ Message sent successfully!
-              </motion.div>
-            )}
-          </motion.form>
+                className="floating-orb orb-1"
+                animate={{
+                  y: [0, -30, 0],
+                  x: [0, 20, 0],
+                  scale: [1, 1.2, 1],
+                }}
+                transition={{
+                  duration: 4,
+                  repeat: Infinity,
+                  ease: 'easeInOut',
+                }}
+              />
+              
+              <motion.div
+                className="floating-orb orb-2"
+                animate={{
+                  y: [0, 30, 0],
+                  x: [0, -20, 0],
+                  scale: [1, 0.8, 1],
+                }}
+                transition={{
+                  duration: 5,
+                  repeat: Infinity,
+                  ease: 'easeInOut',
+                }}
+              />
+              
+              <motion.div
+                className="floating-orb orb-3"
+                animate={{
+                  y: [0, -20, 0],
+                  rotate: [0, 360, 0],
+                }}
+                transition={{
+                  duration: 6,
+                  repeat: Infinity,
+                  ease: 'linear',
+                }}
+              />
+
+              {/* Connecting lines */}
+              <svg className="connection-lines" viewBox="0 0 300 400">
+                <defs>
+                  <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#ff6b6b" stopOpacity="0.5" />
+                    <stop offset="100%" stopColor="#ff0080" stopOpacity="0.5" />
+                  </linearGradient>
+                </defs>
+                
+                <motion.line
+                  x1="150" y1="50" x2="80" y2="150"
+                  stroke="url(#lineGradient)"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  initial={{ pathLength: 0 }}
+                  whileInView={{ pathLength: 1 }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                />
+                
+                <motion.line
+                  x1="150" y1="50" x2="220" y2="150"
+                  stroke="url(#lineGradient)"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  initial={{ pathLength: 0 }}
+                  whileInView={{ pathLength: 1 }}
+                  transition={{ duration: 2, repeat: Infinity, delay: 0.5 }}
+                />
+                
+                <motion.line
+                  x1="150" y1="50" x2="150" y2="180"
+                  stroke="url(#lineGradient)"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  initial={{ pathLength: 0 }}
+                  whileInView={{ pathLength: 1 }}
+                  transition={{ duration: 2, repeat: Infinity, delay: 1 }}
+                />
+                
+                <motion.circle
+                  cx="150" cy="50" r="8"
+                  fill="#ff6b6b"
+                  animate={{ r: [8, 12, 8] }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                />
+                
+                <motion.circle
+                  cx="80" cy="150" r="6"
+                  fill="#ff0080"
+                  animate={{ opacity: [0.5, 1, 0.5] }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                />
+                
+                <motion.circle
+                  cx="220" cy="150" r="6"
+                  fill="#ff0080"
+                  animate={{ opacity: [0.5, 1, 0.5] }}
+                  transition={{ duration: 2, repeat: Infinity, delay: 0.3 }}
+                />
+                
+                <motion.circle
+                  cx="150" cy="180" r="6"
+                  fill="#ff0080"
+                  animate={{ opacity: [0.5, 1, 0.5] }}
+                  transition={{ duration: 2, repeat: Infinity, delay: 0.6 }}
+                />
+              </svg>
+
+              {/* Pulse ring */}
+              <motion.div
+                className="pulse-ring"
+                animate={{ scale: [1, 1.5], opacity: [1, 0] }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                }}
+              />
+            </div>
+
+            <p className="animation-text">
+              Ready to collaborate? Reach out through any channel and let's build something amazing!
+            </p>
+          </motion.div>
         </motion.div>
       </div>
     </section>
