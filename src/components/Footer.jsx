@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { motion } from 'framer-motion'
 import { FaGithub, FaLinkedin, FaEnvelope, FaArrowUp } from 'react-icons/fa'
 import './Footer.css'

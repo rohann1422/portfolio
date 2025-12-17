@@ -38,10 +38,9 @@
   border-radius: 10px;
   text-decoration: none;
   transition: all 0.3s ease;
-  border-left: 4px solid #ff6b6b;
-  backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 107, 107, 0.1);
   border-left: 4px solid #ff6b6b;
+  backdrop-filter: blur(10px);
 }
 
 .info-item:hover {
